@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Expenses - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+
+        <a href="users.html">
+            Users
+        </a>
+
+
+        <a
+            href="ceo-expenses.html"
+            class="active"
+        >
+            Expenses
+        </a>
+
+
+        <a href="claims.html">
+            Claims
+        </a>
+
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            Logout
+        </a>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    Expenses
+                </h1>
+
+                <p>
+                    Review and manage employee expenses
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    C
+                </div>
+
+
+                <span id="userName">
+                    CEO
+                </span>
+
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Expenses
+                </h3>
+
+                <div
+                    class="value"
+                    id="expenseCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Pending
+                </h3>
+
+                <div
+                    class="value"
+                    id="pendingCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Approved
+                </h3>
+
+                <div
+                    class="value"
+                    id="approvedCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Amount
+                </h3>
+
+                <div
+                    class="value"
+                    id="amountTotal"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-card">
+
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Employee Expenses
+                    </h2>
+
+                    <p>
+                        Review, approve, reject or delete expenses.
+                    </p>
+
+                </div>
+
+
+                <button type="button" class="refresh-btn" onclick="refreshUsers()">
+                  <span class="refresh-icon">↻</span>
+                  <span>Refresh</span>
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Employee</th>
+
+                            <th>Project</th>
+
+                            <th>Date</th>
+
+                            <th>Category</th>
+
+                            <th>Amount</th>
+
+                            <th>Status</th>
+
+                            <th>Actions</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="expensesTable">
+
+                        <tr>
+
+                            <td colspan="8">
+                                Loading expenses...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+<script>
+    onclick="approveExpense('${expense.expense_id}')"
+    onclick="rejectExpense('${expense.expense_id}')"
+    onclick="deleteExpense('${expense.expense_id}')"
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (!checkCEOAccess()) {
+            return;
+        }
+
+        displayCurrentUser();
+
+        loadCEOExpenses();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

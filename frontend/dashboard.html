@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CEO Dashboard - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+
+        <a
+            href="dashboard.html"
+            class="active"
+        >
+            Dashboard
+        </a>
+
+
+        <a href="users.html">
+            Users
+        </a>
+
+
+        <a href="ceo-expenses.html">
+            Expenses
+        </a>
+
+
+        <a href="claims.html">
+            Claims
+        </a>
+
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    CEO Dashboard
+                </h1>
+
+                <p>
+                    Expense Management Overview
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    C
+                </div>
+
+
+                <span id="userName">
+                    CEO
+                </span>
+
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- STATS -->
+
+        <div class="stats-grid">
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Users
+                </h3>
+
+                <div
+                    class="value"
+                    id="totalUsers"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Expenses
+                </h3>
+
+                <div
+                    class="value"
+                    id="totalExpenses"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Pending Expenses
+                </h3>
+
+                <div
+                    class="value"
+                    id="pendingExpenses"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Amount
+                </h3>
+
+                <div
+                    class="value"
+                    id="totalExpenseAmount"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+        </div>
+
+
+      <div class="quick-nav">
+
+    <a href="/users.html" class="quick-nav-card">
+
+        <div class="quick-nav-icon">
+            👥
+        </div>
+
+        <div>
+            <h3>Users</h3>
+            <p>Manage employees and system users.</p>
+        </div>
+
+        <div class="quick-nav-arrow">
+            →
+        </div>
+
+    </a>
+
+
+    <a href="/expenses.html" class="quick-nav-card">
+
+        <div class="quick-nav-icon">
+            ₹
+        </div>
+
+        <div>
+            <h3>Expenses</h3>
+            <p>Review and approve employee expenses.</p>
+        </div>
+
+        <div class="quick-nav-arrow">
+            →
+        </div>
+
+    </a>
+
+
+    <a href="/claims.html" class="quick-nav-card">
+
+        <div class="quick-nav-icon">
+            ✓
+        </div>
+
+        <div>
+            <h3>Claims</h3>
+            <p>Manage reimbursement claims.</p>
+        </div>
+
+        <div class="quick-nav-arrow">
+            →
+        </div>
+
+    </a>
+
+</div>
+
+        <!-- RECENT EXPENSES -->
+
+        <div class="table-card">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Recent Expenses
+                    </h2>
+
+                    <p>
+                        Latest employee submissions.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="ceo-expenses.html"
+                    class="secondary-btn"
+                >
+                    View All
+                </a>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Employee</th>
+                            <th>Project</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="recentExpensesTable">
+
+                        <tr>
+
+                            <td colspan="5">
+                                Loading...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (!checkCEOAccess()) {
+            return;
+        }
+
+        displayCurrentUser();
+
+        loadCEODashboard();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

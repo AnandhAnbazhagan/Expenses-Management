@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Reimbursements - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+
+        <a href="employee-dashboard.html">
+            Dashboard
+        </a>
+
+
+        <a href="employee-expenses.html">
+            My Expenses
+        </a>
+
+
+        <a href="add-expense.html">
+            Add Expense
+        </a>
+
+
+        <a
+            href="employee-claims.html"
+            class="active"
+        >
+            Reimbursements
+        </a>
+
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    Reimbursements
+                </h1>
+
+                <p>
+                    Track your reimbursement claims
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    E
+                </div>
+
+
+                <span id="userName">
+                    Employee
+                </span>
+
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Claims
+                </h3>
+
+                <div
+                    class="value"
+                    id="claimCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Pending
+                </h3>
+
+                <div
+                    class="value"
+                    id="claimPending"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Approved
+                </h3>
+
+                <div
+                    class="value"
+                    id="claimApproved"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Amount
+                </h3>
+
+                <div
+                    class="value"
+                    id="claimAmount"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CLAIM TABLE -->
+
+        <div class="table-card">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        My Claims
+                    </h2>
+
+                    <p>
+                        Reimbursement claims submitted by you.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="reimbursement.html"
+                    class="primary-btn"
+                >
+                    New Claim
+                </a>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                ID
+                            </th>
+
+                            <th>
+                                Expense ID
+                            </th>
+
+                            <th>
+                                Amount
+                            </th>
+
+                            <th>
+                                Description
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="employeeClaimsTable">
+
+                        <tr>
+
+                            <td colspan="6">
+                                Loading claims...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (!checkEmployeeAccess()) {
+            return;
+        }
+
+        displayCurrentUser();
+
+        loadEmployeeClaims();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

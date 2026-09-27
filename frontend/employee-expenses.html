@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Expenses - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+        <a href="employee-dashboard.html">
+            Dashboard
+        </a>
+
+        <a
+            href="employee-expenses.html"
+            class="active"
+        >
+            My Expenses
+        </a>
+
+        <a href="add-expense.html">
+            Add Expense
+        </a>
+
+        <a href="employee-claims.html">
+            Reimbursements
+        </a>
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            Logout
+        </a>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    My Expenses
+                </h1>
+
+                <p>
+                    View your submitted expenses
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    E
+                </div>
+
+                <span id="userName">
+                    Employee
+                </span>
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-card">
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        Expense History
+                    </h2>
+
+                    <p>
+                        All expenses submitted by you.
+                    </p>
+
+                </div>
+
+
+                <button type="button" class="refresh-btn" onclick="refreshUsers()">
+                  <span class="refresh-icon">↻</span>
+                  <span>Refresh</span>
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Project</th>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="employeeExpensesTable">
+
+                        <tr>
+
+                            <td colspan="7">
+                                Loading expenses...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (!checkEmployeeAccess()) {
+            return;
+        }
+
+        displayCurrentUser();
+
+        loadEmployeeExpenses();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

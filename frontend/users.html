@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Users - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+
+        <a
+            href="users.html"
+            class="active"
+        >
+            Users
+        </a>
+
+
+        <a href="ceo-expenses.html">
+            Expenses
+        </a>
+
+
+        <a href="claims.html">
+            Claims
+        </a>
+
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            Logout
+        </a>
+
+    </aside>
+
+
+    <main class="main-content">
+
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    Users
+                </h1>
+
+                <p>
+                    Manage system users
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    C
+                </div>
+
+
+                <span id="userName">
+                    CEO
+                </span>
+
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-card">
+
+
+            <div class="page-header">
+
+                <div>
+
+                    <h2>
+                        User Management
+                    </h2>
+
+                    <p>
+                        View registered employees and administrators.
+                    </p>
+
+                </div>
+
+
+                <button type="button" class="refresh-btn" onclick="refreshUsers()">
+                  <span class="refresh-icon">↻</span>
+                  <span>Refresh</span>
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+
+                            <th>Name</th>
+
+                            <th>Email</th>
+
+                            <th>Role</th>
+
+                            <th>Status</th>
+
+                            <th>Created</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="usersTable">
+
+                        <tr>
+
+                            <td colspan="6">
+                                Loading users...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (!checkCEOAccess()) {
+            return;
+        }
+
+        displayCurrentUser();
+
+        loadUsers();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

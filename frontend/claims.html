@@ -1,0 +1,1290 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Claims - Expense Management</title>
+
+<link rel="stylesheet" href="style.css">
+```
+
+</head>
+
+<body>
+
+<div class="app">
+
+```
+<!-- =========================
+     SIDEBAR
+========================== -->
+
+<aside class="sidebar">
+
+    <div class="sidebar-logo">
+        Expense Management
+    </div>
+
+    <a href="dashboard.html">
+        Dashboard
+    </a>
+
+    <a href="users.html">
+        Users
+    </a>
+
+    <a href="ceo-expenses.html">
+        Expenses
+    </a>
+
+    <a href="claims.html" class="active">
+        Claims
+    </a>
+
+    <a href="#" onclick="logout(); return false;">
+        Logout
+    </a>
+
+</aside>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================== -->
+
+<main class="main-content">
+
+    <!-- TOPBAR -->
+
+    <div class="topbar">
+
+        <div>
+
+            <h1>
+                Reimbursement Claims
+            </h1>
+
+            <p>
+                Review and manage employee reimbursement claims
+            </p>
+
+        </div>
+
+
+        <div class="user-info">
+
+            <div
+                class="user-avatar"
+                id="userAvatar"
+            >
+                A
+            </div>
+
+            <span id="userName">
+                Admin
+            </span>
+
+            <button
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         SUMMARY
+    ========================== -->
+
+    <div class="stats-grid">
+
+        <div class="stat-card">
+
+            <h3>
+                Total Claims
+            </h3>
+
+            <div
+                class="value"
+                id="totalClaims"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Pending
+            </h3>
+
+            <div
+                class="value"
+                id="pendingClaims"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Approved
+            </h3>
+
+            <div
+                class="value"
+                id="approvedClaims"
+            >
+                0
+            </div>
+
+        </div>
+
+
+        <div class="stat-card">
+
+            <h3>
+                Total Amount
+            </h3>
+
+            <div
+                class="value"
+                id="totalClaimAmount"
+            >
+                ₹0
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PENDING CLAIMS
+    ========================== -->
+
+    <div class="table-card">
+
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                gap:20px;
+                margin-bottom:20px;
+                flex-wrap:wrap;
+            "
+        >
+
+            <div>
+
+                <h2>
+                    Pending Reimbursement Claims
+                </h2>
+
+                <p>
+                    Claims waiting for approval.
+                </p>
+
+            </div>
+
+
+            <button
+                class="logout-btn"
+                onclick="loadClaims()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div style="overflow-x:auto;">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Employee</th>
+
+                        <th>Amount</th>
+
+                        <th>Reason</th>
+
+                        <th>Date</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="pendingClaimsTable">
+
+                    <tr>
+
+                        <td colspan="7">
+                            Loading claims...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         PROCESSED CLAIMS
+    ========================== -->
+
+    <div
+        class="table-card"
+        style="margin-top:25px;"
+    >
+
+        <div style="margin-bottom:20px;">
+
+            <h2>
+                Processed Claims
+            </h2>
+
+            <p>
+                Approved, paid, and rejected reimbursement claims.
+            </p>
+
+        </div>
+
+
+        <div style="overflow-x:auto;">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Employee</th>
+
+                        <th>Amount</th>
+
+                        <th>Reason</th>
+
+                        <th>Date</th>
+
+                        <th>Status</th>
+
+                        <th>Actions</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="processedClaimsTable">
+
+                    <tr>
+
+                        <td colspan="7">
+                            Loading claims...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</main>
+```
+
+</div>
+
+<script src="script.js"></script>
+
+<script>
+
+/* =========================================================
+   GET CLAIM STATUS
+========================================================= */
+
+function getClaimStatus(claim) {
+
+    return String(
+        claim.funding_status ||
+        claim.status ||
+        claim.approval_status ||
+        "PENDING"
+    ).toUpperCase();
+
+}
+
+
+/* =========================================================
+   GET CLAIM AMOUNT
+========================================================= */
+
+function getClaimAmount(claim) {
+
+    const amount =
+        claim.total_amount ??
+        claim.amount ??
+        0;
+
+    return Number(amount) || 0;
+
+}
+
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+function getClaimStatusBadge(status) {
+
+    status =
+        String(status || "PENDING")
+        .toUpperCase();
+
+
+    if (status === "APPROVED") {
+
+        return `
+            <span
+                style="
+                    color:#047857;
+                    background:#d1fae5;
+                    padding:6px 10px;
+                    border-radius:20px;
+                    font-size:12px;
+                    font-weight:700;
+                "
+            >
+                APPROVED
+            </span>
+        `;
+
+    }
+
+
+    if (status === "PAID") {
+
+        return `
+            <span
+                style="
+                    color:#1d4ed8;
+                    background:#dbeafe;
+                    padding:6px 10px;
+                    border-radius:20px;
+                    font-size:12px;
+                    font-weight:700;
+                "
+            >
+                PAID
+            </span>
+        `;
+
+    }
+
+
+    if (status === "REJECTED") {
+
+        return `
+            <span
+                style="
+                    color:#b91c1c;
+                    background:#fee2e2;
+                    padding:6px 10px;
+                    border-radius:20px;
+                    font-size:12px;
+                    font-weight:700;
+                "
+            >
+                REJECTED
+            </span>
+        `;
+
+    }
+
+
+    return `
+        <span
+            style="
+                color:#92400e;
+                background:#fef3c7;
+                padding:6px 10px;
+                border-radius:20px;
+                font-size:12px;
+                font-weight:700;
+            "
+        >
+            PENDING
+        </span>
+    `;
+
+}
+
+
+/* =========================================================
+   CLAIM ROW
+========================================================= */
+
+function createClaimRow(claim) {
+
+    const status =
+        getClaimStatus(claim);
+
+
+    const amount =
+        getClaimAmount(claim);
+
+
+    let actions = "";
+
+
+    /* =========================
+       PENDING ACTIONS
+    ========================== */
+
+    if (status === "PENDING") {
+
+        actions = `
+
+            <button
+                onclick="approveClaim(${claim.id})"
+                style="
+                    border:0;
+                    background:#dcfce7;
+                    color:#166534;
+                    padding:7px 10px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    margin-right:5px;
+                "
+            >
+                Approve
+            </button>
+
+
+            <button
+                onclick="rejectClaim(${claim.id})"
+                style="
+                    border:0;
+                    background:#fee2e2;
+                    color:#991b1b;
+                    padding:7px 10px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    margin-right:5px;
+                "
+            >
+                Reject
+            </button>
+
+        `;
+
+    }
+
+
+    /* =========================
+       APPROVED ACTION
+    ========================== */
+
+    if (status === "APPROVED") {
+
+        actions = `
+
+            <button
+                onclick="payClaim(${claim.id})"
+                style="
+                    border:0;
+                    background:#dbeafe;
+                    color:#1d4ed8;
+                    padding:7px 10px;
+                    border-radius:7px;
+                    cursor:pointer;
+                    margin-right:5px;
+                "
+            >
+                Pay
+            </button>
+
+        `;
+
+    }
+
+
+    /* =========================
+       DELETE
+    ========================== */
+
+    actions += `
+
+        <button
+            onclick="deleteClaim(${claim.id})"
+            style="
+                border:0;
+                background:#f1f5f9;
+                color:#334155;
+                padding:7px 10px;
+                border-radius:7px;
+                cursor:pointer;
+            "
+        >
+            Delete
+        </button>
+
+    `;
+
+
+    const row =
+        document.createElement("tr");
+
+
+    row.innerHTML = `
+
+        <td>
+            ${claim.id ?? "-"}
+        </td>
+
+
+        <td>
+            ${
+                escapeHTML(
+                    claim.employee_name ||
+                    "-"
+                )
+            }
+        </td>
+
+
+        <td>
+
+            <strong>
+                ₹${amount.toLocaleString("en-IN")}
+            </strong>
+
+        </td>
+
+
+        <td>
+
+            ${
+                escapeHTML(
+                    claim.description ||
+                    claim.reason ||
+                    claim.notes ||
+                    "-"
+                )
+            }
+
+        </td>
+
+
+        <td>
+
+            ${
+                claim.submission_date ||
+                claim.claim_date ||
+                claim.created_at ||
+                "-"
+            }
+
+        </td>
+
+
+        <td>
+
+            ${
+                getClaimStatusBadge(
+                    status
+                )
+            }
+
+        </td>
+
+
+        <td>
+
+            ${actions}
+
+        </td>
+
+    `;
+
+
+    return row;
+
+}
+
+
+/* =========================================================
+   LOAD CLAIMS
+========================================================= */
+
+async function loadClaims() {
+
+    const pendingTable =
+        document.getElementById(
+            "pendingClaimsTable"
+        );
+
+
+    const processedTable =
+        document.getElementById(
+            "processedClaimsTable"
+        );
+
+
+    pendingTable.innerHTML = `
+
+        <tr>
+
+            <td colspan="7">
+                Loading claims...
+            </td>
+
+        </tr>
+
+    `;
+
+
+    processedTable.innerHTML = `
+
+        <tr>
+
+            <td colspan="7">
+                Loading claims...
+            </td>
+
+        </tr>
+
+    `;
+
+
+    try {
+
+        const response =
+            await apiRequest(
+                "/api/claims"
+            );
+
+
+        console.log(
+            "Claims API:",
+            response
+        );
+
+
+        const claims =
+            Array.isArray(response.claims)
+                ? response.claims
+                : [];
+
+
+        /* =========================
+           COUNTS
+        ========================== */
+
+        let pending = 0;
+
+        let approved = 0;
+
+        let totalAmount = 0;
+
+
+        claims.forEach(
+            function(claim) {
+
+                const status =
+                    getClaimStatus(
+                        claim
+                    );
+
+
+                const amount =
+                    getClaimAmount(
+                        claim
+                    );
+
+
+                if (
+                    status === "PENDING"
+                ) {
+
+                    pending++;
+
+                }
+
+
+                if (
+                    status === "APPROVED"
+                ) {
+
+                    approved++;
+
+                }
+
+
+                totalAmount += amount;
+
+            }
+        );
+
+
+        /* =========================
+           SUMMARY
+        ========================== */
+
+        document.getElementById(
+            "totalClaims"
+        ).textContent =
+            claims.length;
+
+
+        document.getElementById(
+            "pendingClaims"
+        ).textContent =
+            pending;
+
+
+        document.getElementById(
+            "approvedClaims"
+        ).textContent =
+            approved;
+
+
+        document.getElementById(
+            "totalClaimAmount"
+        ).textContent =
+            "₹" +
+            totalAmount.toLocaleString(
+                "en-IN"
+            );
+
+
+        /* =========================
+           SEPARATE CLAIMS
+        ========================== */
+
+        const pendingClaims =
+            claims.filter(
+                function(claim) {
+
+                    return (
+                        getClaimStatus(
+                            claim
+                        ) === "PENDING"
+                    );
+
+                }
+            );
+
+
+        const processedClaims =
+            claims.filter(
+                function(claim) {
+
+                    return (
+                        getClaimStatus(
+                            claim
+                        ) !== "PENDING"
+                    );
+
+                }
+            );
+
+
+        /* =========================
+           PENDING TABLE
+        ========================== */
+
+        pendingTable.innerHTML = "";
+
+
+        if (
+            pendingClaims.length === 0
+        ) {
+
+            pendingTable.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        style="
+                            text-align:center;
+                            padding:25px;
+                        "
+                    >
+
+                        No pending reimbursement claims.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+        else {
+
+            pendingClaims.forEach(
+                function(claim) {
+
+                    pendingTable.appendChild(
+                        createClaimRow(
+                            claim
+                        )
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           PROCESSED TABLE
+        ========================== */
+
+        processedTable.innerHTML = "";
+
+
+        if (
+            processedClaims.length === 0
+        ) {
+
+            processedTable.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        style="
+                            text-align:center;
+                            padding:25px;
+                        "
+                    >
+
+                        No processed claims.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+        else {
+
+            processedClaims.forEach(
+                function(claim) {
+
+                    processedTable.appendChild(
+                        createClaimRow(
+                            claim
+                        )
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Claims loading error:",
+            error
+        );
+
+
+        pendingTable.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="
+                        color:#dc2626;
+                        text-align:center;
+                    "
+                >
+
+                    Failed to load claims.
+
+                    <br>
+
+                    ${
+                        escapeHTML(
+                            error.message ||
+                            "Unknown error"
+                        )
+                    }
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        processedTable.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="
+                        color:#dc2626;
+                        text-align:center;
+                    "
+                >
+
+                    Failed to load claims.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   APPROVE CLAIM
+========================================================= */
+
+async function approveClaim(id) {
+
+    if (
+        !confirm(
+            "Approve this reimbursement claim?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/claims/${id}/approve`,
+            {
+                method: "PUT"
+            }
+        );
+
+
+        alert(
+            "Claim approved successfully."
+        );
+
+
+        await loadClaims();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Approve claim error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Failed to approve claim."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   REJECT CLAIM
+========================================================= */
+
+async function rejectClaim(id) {
+
+    if (
+        !confirm(
+            "Reject this reimbursement claim?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/claims/${id}/reject`,
+            {
+                method: "PUT"
+            }
+        );
+
+
+        alert(
+            "Claim rejected successfully."
+        );
+
+
+        await loadClaims();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Reject claim error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Failed to reject claim."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   PAY CLAIM
+========================================================= */
+
+async function payClaim(id) {
+
+    const paymentReference =
+        prompt(
+            "Enter payment reference:"
+        );
+
+
+    if (
+        !paymentReference ||
+        !paymentReference.trim()
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/claims/${id}/pay`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    payment_reference:
+                        paymentReference.trim()
+                })
+
+            }
+        );
+
+
+        alert(
+            "Claim paid successfully."
+        );
+
+
+        await loadClaims();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Pay claim error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Failed to pay claim."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   DELETE CLAIM
+========================================================= */
+
+async function deleteClaim(id) {
+
+    if (
+        !confirm(
+            "Delete this reimbursement claim permanently?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    try {
+
+        await apiRequest(
+            `/api/claims/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+
+        alert(
+            "Claim deleted successfully."
+        );
+
+
+        await loadClaims();
+
+    }
+
+
+    catch (error) {
+
+        console.error(
+            "Delete claim error:",
+            error
+        );
+
+
+        alert(
+            error.message ||
+            "Failed to delete claim."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHTML(value) {
+
+    return String(value)
+
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+
+        .replace(
+            /</g,
+            "&lt;"
+        )
+
+        .replace(
+            />/g,
+            "&gt;"
+        )
+
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        if (
+            typeof displayCurrentUser ===
+            "function"
+        ) {
+
+            displayCurrentUser();
+
+        }
+
+
+        loadClaims();
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>

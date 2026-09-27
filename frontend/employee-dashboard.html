@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Employee Dashboard - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+        <a
+            href="employee-dashboard.html"
+            class="active"
+        >
+            Dashboard
+        </a>
+
+        <a href="employee-expenses.html">
+            My Expenses
+        </a>
+
+        <a href="add-expense.html">
+            Add Expense
+        </a>
+
+        <a href="employee-claims.html">
+            Reimbursements
+        </a>
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            Logout
+        </a>
+
+    </aside>
+
+
+    <main class="main-content">
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    Employee Dashboard
+                </h1>
+
+                <p>
+                    Welcome back
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    E
+                </div>
+
+                <span id="userName">
+                    Employee
+                </span>
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="stats-grid">
+
+            <div class="stat-card">
+
+                <h3>
+                    My Expenses
+                </h3>
+
+                <div
+                    class="value"
+                    id="expenseCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Pending
+                </h3>
+
+                <div
+                    class="value"
+                    id="pendingCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Approved
+                </h3>
+
+                <div
+                    class="value"
+                    id="approvedCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <h3>
+                    Total Amount
+                </h3>
+
+                <div
+                    class="value"
+                    id="amountTotal"
+                >
+                    ₹0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-nav">
+
+    <a href="/add-expense.html" class="quick-nav-card">
+
+        <div class="quick-nav-icon">
+            👥
+        </div>
+
+        <div>
+            <h3>Add Expense</h3>
+            <p>Submit a new employee expense.</p>
+        </div>
+
+        <div class="quick-nav-arrow">
+            →
+        </div>
+
+    </a>
+
+
+    <a href="/employee-expenses.html" class="quick-nav-card">
+
+        <div class="quick-nav-icon">
+            ₹
+        </div>
+
+        <div>
+            <h3>My Expenses</h3>
+            <p>View your submitted expenses.</p>
+        </div>
+
+        <div class="quick-nav-arrow">
+            →
+        </div>
+
+    </a>
+
+
+    <a href="/employee-claims.html" class="quick-nav-card">
+
+        <div class="quick-nav-icon">
+            ✓
+        </div>
+
+        <div>
+            <h3>Reimbursements</h3>
+            <p>Track your reimbursement claims.</p>
+        </div>
+
+        <div class="quick-nav-arrow">
+            →
+        </div>
+
+    </a>
+
+</div>
+
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (!checkEmployeeAccess()) {
+            return;
+        }
+
+        displayCurrentUser();
+
+        loadEmployeeDashboard();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reimbursement - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+        <a href="employee-dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="employee-expenses.html">
+            My Expenses
+        </a>
+
+        <a href="add-expense.html">
+            Add Expense
+        </a>
+
+        <a href="employee-claims.html">
+            Reimbursements
+        </a>
+
+        <a href="reimbursement.html" class="active">
+            New Reimbursement
+        </a>
+
+        <a href="#" onclick="logout(); return false;">
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    Reimbursement
+                </h1>
+
+                <p>
+                    Submit a reimbursement request
+                </p>
+
+            </div>
+
+
+            <div class="user-info">
+
+                <div
+                    class="user-avatar"
+                    id="userAvatar"
+                >
+                    E
+                </div>
+
+                <span id="userName">
+                    Employee
+                </span>
+
+                <button
+                    class="logout-btn"
+                    onclick="logout()"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <div class="table-card">
+
+            <h2>
+                Reimbursement Request
+            </h2>
+
+            <p>
+                Enter your reimbursement details.
+            </p>
+
+
+            <form
+                id="reimbursementForm"
+                style="
+                    max-width:700px;
+                    margin-top:25px;
+                "
+            >
+
+                <!-- EXPENSE ID -->
+
+                <div style="margin-bottom:18px;">
+
+                    <label for="expenseId">
+                        Expense ID *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="expenseId"
+                        name="expense_id"
+                        placeholder="Enter Expense ID"
+                        required
+                        autocomplete="off"
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- AMOUNT -->
+
+                <div style="margin-bottom:18px;">
+
+                    <label for="amount">
+                        Reimbursement Amount (₹) *
+                    </label>
+
+                    <input
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        placeholder="Enter reimbursement amount"
+                        min="0.01"
+                        step="0.01"
+                        required
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- REASON -->
+
+                <div style="margin-bottom:18px;">
+
+                    <label for="reason">
+                        Reason / Description *
+                    </label>
+
+                    <textarea
+                        id="reason"
+                        name="reason"
+                        rows="6"
+                        placeholder="Enter your reason or description"
+                        required
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                            resize:vertical;
+                        "
+                    ></textarea>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="reimbursementMessage"
+                    style="
+                        margin-bottom:15px;
+                        font-weight:600;
+                    "
+                ></div>
+
+
+                <!-- BUTTONS -->
+
+                <div
+                    style="
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                    "
+                >
+
+                    <button
+                        type="submit"
+                        class="logout-btn"
+                        id="submitReimbursementBtn"
+                    >
+                        Submit Request
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="logout-btn"
+                        onclick="
+                            window.location.href='employee-claims.html'
+                        "
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="script.js"></script>
+
+
+<script>
+
+/* =========================================================
+   DISPLAY CURRENT USER
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        if (
+            typeof displayCurrentUser === "function"
+        ) {
+
+            displayCurrentUser();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   SUBMIT REIMBURSEMENT
+========================================================= */
+
+document
+    .getElementById("reimbursementForm")
+    .addEventListener(
+        "submit",
+        submitReimbursement
+    );
+
+
+async function submitReimbursement(event) {
+
+    event.preventDefault();
+
+
+    /* =====================================================
+       CHECK LOGIN
+    ===================================================== */
+
+    const storedUser =
+        localStorage.getItem("user");
+
+
+    if (!storedUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
+
+
+    let loginData;
+
+
+    try {
+
+        loginData =
+            JSON.parse(storedUser);
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Login data error:",
+            error
+        );
+
+        localStorage.removeItem("user");
+
+        alert(
+            "Your session is invalid. Please login again."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+
+    }
+
+
+    const user =
+        loginData.user || loginData;
+
+
+    const employeeId =
+        Number(user.id);
+
+
+    const role =
+        String(
+            user.role || ""
+        ).toUpperCase();
+
+
+    /* =====================================================
+       VALIDATE USER
+    ===================================================== */
+
+    if (!employeeId) {
+
+        alert(
+            "Employee ID not found. Please login again."
+        );
+
+        return;
+
+    }
+
+
+    if (role !== "EMPLOYEE") {
+
+        alert(
+            "Only employees can submit reimbursement requests."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       GET FORM VALUES
+    ===================================================== */
+
+    const expenseId =
+        document
+            .getElementById("expenseId")
+            .value
+            .trim();
+
+
+    const amount =
+        Number(
+            document
+                .getElementById("amount")
+                .value
+        );
+
+
+    const reason =
+        document
+            .getElementById("reason")
+            .value
+            .trim();
+
+
+    /* =====================================================
+       VALIDATION
+    ===================================================== */
+
+    if (!expenseId) {
+
+        alert(
+            "Please enter the Expense ID."
+        );
+
+        return;
+
+    }
+
+
+    if (!amount || amount <= 0) {
+
+        alert(
+            "Please enter a valid reimbursement amount."
+        );
+
+        return;
+
+    }
+
+
+    if (!reason) {
+
+        alert(
+            "Please enter the reason or description."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================================
+       UI
+    ===================================================== */
+
+    const button =
+        document.getElementById(
+            "submitReimbursementBtn"
+        );
+
+
+    const message =
+        document.getElementById(
+            "reimbursementMessage"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Submitting...";
+
+
+    message.textContent =
+        "Submitting reimbursement request...";
+
+
+    message.style.color =
+        "#64748b";
+
+
+    /* =====================================================
+       REQUEST DATA
+    ===================================================== */
+
+    const reimbursementData = {
+
+        expense_id:
+            expenseId,
+
+        amount:
+            amount,
+
+        reason:
+            reason
+
+    };
+
+
+    console.log(
+        "Reimbursement request:",
+        reimbursementData
+    );
+
+
+    /* =====================================================
+       API REQUEST
+    ===================================================== */
+
+    try {
+
+        const response =
+            await apiRequest(
+                "/api/reimbursements",
+                {
+
+                    method:
+                        "POST",
+
+                    body:
+                        JSON.stringify(
+                            reimbursementData
+                        )
+
+                }
+            );
+
+
+        console.log(
+            "Reimbursement response:",
+            response
+        );
+
+
+        /* =================================================
+           SUCCESS
+        ================================================= */
+
+        message.textContent =
+            response.message ||
+            "Reimbursement request submitted successfully.";
+
+
+        message.style.color =
+            "#16a34a";
+
+
+        alert(
+            response.message ||
+            "Reimbursement request submitted successfully."
+        );
+
+
+        window.location.href =
+            "employee-claims.html";
+
+    }
+
+
+    /* =====================================================
+       ERROR
+    ===================================================== */
+
+    catch (error) {
+
+        console.error(
+            "Reimbursement error:",
+            error
+        );
+
+
+        message.textContent =
+            error.message ||
+            "Failed to submit reimbursement.";
+
+
+        message.style.color =
+            "#dc2626";
+
+
+        alert(
+            error.message ||
+            "Failed to submit reimbursement."
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Submit Request";
+
+    }
+
+}
+
+</script>
+
+</body>
+
+</html>

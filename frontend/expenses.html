@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Add Expense - Expense Management</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+<div class="app">
+
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+            Expense Management
+        </div>
+
+
+        <a href="employee-dashboard.html">
+            Dashboard
+        </a>
+
+
+        <a href="employee-expenses.html">
+            My Expenses
+        </a>
+
+
+        <a
+            href="add-expense.html"
+            class="active"
+        >
+            Add Expense
+        </a>
+
+
+        <a href="employee-claims.html">
+            Reimbursements
+        </a>
+
+
+        <a
+            href="#"
+            onclick="logout(); return false;"
+        >
+            Logout
+        </a>
+
+    </aside>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
+
+    <main class="main-content">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    Add Expense
+                </h1>
+
+                <p>
+                    Manually submit a new expense
+                </p>
+
+            </div>
+
+
+            <button
+                type="button"
+                class="logout-btn"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             EXPENSE FORM
+        ================================================== -->
+
+        <div class="table-card">
+
+            <h2>
+                Expense Details
+            </h2>
+
+            <p>
+                Enter the details of your expense below.
+            </p>
+
+
+            <form
+                id="expenseForm"
+                style="
+                    max-width:700px;
+                    margin-top:25px;
+                "
+            >
+
+
+                <!-- PROJECT -->
+
+                <div style="margin-bottom:18px;">
+
+                    <label for="project">
+                        Project *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="project"
+                        name="project"
+                        placeholder="Enter project name"
+                        required
+                        autocomplete="off"
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div style="margin-bottom:18px;">
+
+                    <label for="date">
+                        Expense Date *
+                    </label>
+
+                    <input
+                        type="date"
+                        id="date"
+                        name="date"
+                        required
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div style="margin-bottom:18px;">
+
+                    <label for="category">
+                        Category *
+                    </label>
+
+                    <select
+                        id="category"
+                        name="category"
+                        required
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                        "
+                    >
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="Travel">
+                            Travel
+                        </option>
+
+                        <option value="Food">
+                            Food
+                        </option>
+
+                        <option value="Accommodation">
+                            Accommodation
+                        </option>
+
+                        <option value="Office Supplies">
+                            Office Supplies
+                        </option>
+
+                        <option value="Transportation">
+                            Transportation
+                        </option>
+
+                        <option value="Communication">
+                            Communication
+                        </option>
+
+                        <option value="Equipment">
+                            Equipment
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div style="margin-bottom:18px;">
+
+                    <label for="description">
+                        Description *
+                    </label>
+
+                    <textarea
+                        id="description"
+                        name="description"
+                        rows="4"
+                        placeholder="Enter expense description"
+                        required
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                            resize:vertical;
+                        "
+                    ></textarea>
+
+                </div>
+
+
+                <!-- AMOUNT -->
+
+                <div style="margin-bottom:22px;">
+
+                    <label for="amount">
+                        Amount (₹) *
+                    </label>
+
+                    <input
+                        type="number"
+                        id="amount"
+                        name="amount"
+                        placeholder="Enter amount"
+                        min="1"
+                        step="0.01"
+                        required
+                        style="
+                            width:100%;
+                            padding:12px;
+                            margin-top:6px;
+                            box-sizing:border-box;
+                        "
+                    >
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div
+                    id="expenseMessage"
+                    style="
+                        margin-bottom:15px;
+                        font-weight:600;
+                    "
+                ></div>
+
+
+                <!-- BUTTONS -->
+
+                <div
+                    style="
+                        display:flex;
+                        gap:10px;
+                        flex-wrap:wrap;
+                    "
+                >
+
+                    <button
+                        type="submit"
+                        class="logout-btn"
+                        id="submitExpenseBtn"
+                    >
+                        Submit Expense
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="logout-btn"
+                        onclick="
+                            window.location.href='employee-expenses.html'
+                        "
+                    >
+                        Cancel
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     MAIN SCRIPT
+====================================================== -->
+
+<script src="script.js"></script>
+
+
+<script>
+
+/* =========================================================
+   FORM SUBMIT
+========================================================= */
+
+document
+    .getElementById("expenseForm")
+    .addEventListener(
+        "submit",
+        submitExpense
+    );
+
+
+/* =========================================================
+   SUBMIT EXPENSE
+========================================================= */
+
+async function submitExpense(event) {
+
+    event.preventDefault();
+
+
+    console.log(
+        "Starting expense submission..."
+    );
+
+
+    /* =====================================================
+       GET LOGIN SESSION
+    ====================================================== */
+
+    const storedUser =
+        localStorage.getItem("user");
+
+
+    if (!storedUser) {
+
+        alert(
+            "Please login first."
+        );
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+
+    /* =====================================================
+       PARSE LOGIN DATA
+    ====================================================== */
+
+    let loginData;
+
+
+    try {
+
+        loginData =
+            JSON.parse(
+                storedUser
+            );
+
+    } catch (error) {
+
+        console.error(
+            "Invalid login data:",
+            error
+        );
+
+
+        localStorage.removeItem(
+            "user"
+        );
+
+
+        alert(
+            "Your login session is invalid. Please login again."
+        );
+
+
+        window.location.href =
+            "index.html";
+
+        return;
+    }
+
+
+    /* =====================================================
+       GET USER
+    ====================================================== */
+
+    const user =
+        loginData.user ||
+        loginData;
+
+
+    console.log(
+        "Logged-in user:",
+        user
+    );
+
+
+    /* =====================================================
+       GET EMPLOYEE ID
+    ====================================================== */
+
+    const employeeId =
+        Number(
+            user.id
+        );
+
+
+    if (!employeeId) {
+
+        alert(
+            "Employee ID not found. Please logout and login again."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       CHECK ROLE
+    ====================================================== */
+
+    const role =
+        String(
+            user.role || ""
+        ).toUpperCase();
+
+
+    if (
+        role !== "EMPLOYEE"
+    ) {
+
+        alert(
+            "Only employees can submit expenses."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       GET FORM VALUES
+    ====================================================== */
+
+    const project =
+        document
+            .getElementById("project")
+            .value
+            .trim();
+
+
+    const date =
+        document
+            .getElementById("date")
+            .value;
+
+
+    const category =
+        document
+            .getElementById("category")
+            .value;
+
+
+    const description =
+        document
+            .getElementById("description")
+            .value
+            .trim();
+
+
+    const amount =
+        Number(
+            document
+                .getElementById("amount")
+                .value
+        );
+
+
+    /* =====================================================
+       VALIDATION
+    ====================================================== */
+
+    if (!project) {
+
+        alert(
+            "Please enter the project name."
+        );
+
+        return;
+    }
+
+
+    if (!date) {
+
+        alert(
+            "Please select the expense date."
+        );
+
+        return;
+    }
+
+
+    if (!category) {
+
+        alert(
+            "Please select a category."
+        );
+
+        return;
+    }
+
+
+    if (!description) {
+
+        alert(
+            "Please enter the expense description."
+        );
+
+        return;
+    }
+
+
+    if (
+        !Number.isFinite(amount) ||
+        amount <= 0
+    ) {
+
+        alert(
+            "Please enter a valid expense amount."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       BUTTON + MESSAGE
+    ====================================================== */
+
+    const button =
+        document.getElementById(
+            "submitExpenseBtn"
+        );
+
+
+    const message =
+        document.getElementById(
+            "expenseMessage"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Submitting...";
+
+
+    message.textContent =
+        "Submitting expense...";
+
+
+    message.style.color =
+        "#64748b";
+
+
+    /* =====================================================
+       CREATE REQUEST DATA
+    ====================================================== */
+
+    const expenseData = {
+
+        employee_id:
+            employeeId,
+
+        project:
+            project,
+
+        date:
+            date,
+
+        category:
+            category,
+
+        description:
+            description,
+
+        amount:
+            amount
+
+    };
+
+
+    console.log(
+        "Sending expense data:",
+        expenseData
+    );
+
+
+    /* =====================================================
+       SEND TO FASTAPI
+    ====================================================== */
+
+    try {
+
+        const response =
+            await apiRequest(
+                "/api/expenses",
+                {
+
+                    method: "POST",
+
+                    body:
+                        JSON.stringify(
+                            expenseData
+                        )
+
+                }
+            );
+
+
+        console.log(
+            "Expense API response:",
+            response
+        );
+
+
+        /* =================================================
+           SUCCESS
+        ================================================== */
+
+        message.textContent =
+            "Expense submitted successfully!";
+
+
+        message.style.color =
+            "#16a34a";
+
+
+        alert(
+            "Expense submitted successfully!"
+        );
+
+
+        /* =================================================
+           REDIRECT
+        ================================================== */
+
+        window.location.href =
+            "employee-expenses.html";
+
+
+    } catch (error) {
+
+        console.error(
+            "Expense submission failed:",
+            error
+        );
+
+
+        message.textContent =
+            error.message ||
+            "Failed to submit expense.";
+
+
+        message.style.color =
+            "#dc2626";
+
+
+        alert(
+            error.message ||
+            "Failed to submit expense."
+        );
+
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Submit Expense";
+
+    }
+
+}
+
+
+/* =========================================================
+   SET TODAY AS DEFAULT DATE
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const dateInput =
+            document.getElementById(
+                "date"
+            );
+
+
+        if (!dateInput) {
+            return;
+        }
+
+
+        const today =
+            new Date()
+                .toISOString()
+                .split("T")[0];
+
+
+        dateInput.value =
+            today;
+
+    }
+);
+
+</script>
+
+</body>
+
+</html>
