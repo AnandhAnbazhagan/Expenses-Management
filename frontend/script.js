@@ -2,84 +2,55 @@
    API CONFIGURATION
 ========================================================= */
 
-const API_BASE_URL = "http://127.0.0.1:8000";
+const API_BASE_URL = "https://backend-9cxv.vercel.app";
 
 
 /* =========================================================
    API REQUEST HELPER
 ========================================================= */
 
+
 async function apiRequest(endpoint, options = {}) {
-
-    try {
-
-        const config = {
+    const response = await fetch(
+        `${API_BASE_URL}${endpoint}`,
+        {
             ...options,
             headers: {
                 "Content-Type": "application/json",
-                "Accept": "application/json",
                 ...(options.headers || {})
             }
-        };
-
-        const response = await fetch(
-            API_BASE_URL + endpoint,
-            config
-        );
-
-        let data = null;
-
-        const contentType =
-            response.headers.get("content-type");
-
-        if (
-            contentType &&
-            contentType.includes("application/json")
-        ) {
-            data = await response.json();
         }
+    );
 
-        if (!response.ok) {
+    let data;
 
-            let message = "Request failed.";
-
-            if (data) {
-
-                if (typeof data.detail === "string") {
-                    message = data.detail;
-                }
-
-                else if (Array.isArray(data.detail)) {
-
-                    message = data.detail
-                        .map(item => item.msg || "Validation error")
-                        .join(", ");
-                }
-            }
-
-            throw new Error(message);
-        }
-
-        return data;
-
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error(`Server returned ${response.status}`);
     }
 
-    catch (error) {
-
-        console.error(
-            "API ERROR:",
-            endpoint,
-            error
+    if (!response.ok) {
+        throw new Error(
+            data.detail || data.message || `Request failed: ${response.status}`
         );
+    }
 
-        if (error instanceof TypeError) {
+    return data;
+}
 
-            throw new Error(
-                "Failed to connect to the backend. Make sure FastAPI is running on http://127.0.0.1:8000"
-            );
-        }
 
-        throw error;
+async function loadClaims() {
+    try {
+        const data = await apiRequest("/api/claims");
+
+        console.log(data);
+
+        // Your existing code to display claims goes here
+
+    } catch (error) {
+        console.error("Failed to load claims:", error);
+        alert("Failed to load claims: " + error.message);
     }
 }
 
